@@ -1,4 +1,4 @@
-#End-to-end DWH development and Analytics Project
+# End-to-end DWH development and Analytics Project
 
 Welcome to the **End-to-end DWH development and Analytics Project** repository!
 This project demonstrate a comprehensive data warehouseing and analytics solution, from building a data warehouse to generateactionable insights. 
