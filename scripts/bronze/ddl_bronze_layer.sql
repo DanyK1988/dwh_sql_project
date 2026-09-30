@@ -11,8 +11,8 @@ create table if not exists bronze.crm_cust_info (
     cst_id int,
     cst_key varchar(50),
     cst_firstname varchar(50),
-    cst_lastnae varchar(50),
-    cst_material_status varchar(50),
+    cst_lastname varchar(50),
+    cst_marital_status varchar(50),
     cst_gender varchar(50),
     cst_create_date date
 );

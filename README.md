@@ -6,6 +6,8 @@ This project demonstrate a comprehensive data warehouseing and analytics solutio
 
 ---
 
+## [Pipeline](https://drive.google.com/file/d/1WMD3ynuIZufVBP6c_9gbMabAWGwh1gUZ/view?usp=sharing)
+
 
 ## Project Requirements
 
