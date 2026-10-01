@@ -17,10 +17,10 @@ Usage:
 -- =============================================================================
 -- Create Dimension: gold.dim_customers
 -- =============================================================================
-CREATE VIEW gold.dim_customers AS
+CREATE OR REPLACE VIEW gold.dim_customers AS
 SELECT
     ROW_NUMBER() OVER (
-        ORDER BY cst_id
+        ORDER BY ci.cst_id
     ) AS customer_key, -- Surrogate key
     ci.cst_id AS customer_id,
     ci.cst_key AS customer_number,
@@ -29,7 +29,7 @@ SELECT
     la.cntry AS country,
     ci.cst_marital_status AS marital_status,
     CASE
-        WHEN ci.cst_gndr != 'n/a' THEN ci.cst_gndr -- CRM is the primary source for gender
+        WHEN ci.cst_gndr <> 'n/a' THEN ci.cst_gndr -- CRM is the primary source for gender
         ELSE COALESCE(ca.gen, 'n/a') -- Fallback to ERP data
     END AS gender,
     ca.bdate AS birthdate,
@@ -37,12 +37,11 @@ SELECT
 FROM silver.crm_cust_info ci
     LEFT JOIN silver.erp_cust_az12 ca ON ci.cst_key = ca.cid
     LEFT JOIN silver.erp_loc_a101 la ON ci.cst_key = la.cid;
-GO
 
 -- =============================================================================
 -- Create Dimension: gold.dim_products
 -- =============================================================================
-CREATE VIEW gold.dim_products AS
+CREATE OR REPLACE VIEW gold.dim_products AS
 SELECT
     ROW_NUMBER() OVER (
         ORDER BY pn.prd_start_dt, pn.prd_key
@@ -62,12 +61,11 @@ FROM silver.crm_prd_info pn
 WHERE
     pn.prd_end_dt IS NULL;
 -- Filter out all historical data
-GO
 
 -- =============================================================================
 -- Create Fact Table: gold.fact_sales
 -- =============================================================================
-CREATE VIEW gold.fact_sales AS
+CREATE OR REPLACE VIEW gold.fact_sales AS
 SELECT
     sd.sls_ord_num AS order_number,
     pr.product_key AS product_key,
@@ -81,4 +79,3 @@ SELECT
 FROM silver.crm_sales_details sd
     LEFT JOIN gold.dim_products pr ON sd.sls_prd_key = pr.product_number
     LEFT JOIN gold.dim_customers cu ON sd.sls_cust_id = cu.customer_id;
-GO
